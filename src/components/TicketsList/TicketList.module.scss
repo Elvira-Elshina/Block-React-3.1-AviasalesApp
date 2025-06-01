@@ -1,0 +1,82 @@
+$blue-color: #2196f3;
+$border-filter-color: #dfe5ec;
+$text-color: #4a4a4a;
+
+@mixin active-filter-item-styles {
+  background-color: $blue-color;
+  color: white;
+}
+
+.filterTickets {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+  height: 48px;
+  border: 1px solid $border-filter-color;
+  border-radius: 5px;
+  text-transform: uppercase;
+  font-size: 12px;
+  color: $text-color;
+  background-color: white;
+}
+
+.ticketsUl {
+  width: 100%;
+  padding: 0;
+}
+
+.filterItem {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 33.3333%;
+  height: inherit;
+  text-transform: inherit;
+  font-size: inherit;
+  color: inherit;
+  background-color: inherit;
+  border: none;
+  transition: background-color 0.2s ease;
+  &:hover {
+    @include active-filter-item-styles();
+  }
+
+  &:focus {
+    background-color: $blue-color;
+  }
+}
+
+.mostCheap {
+  border-right: 1px solid $border-filter-color;
+  border-top-left-radius: inherit;
+  border-bottom-left-radius: inherit;
+}
+
+.mostFast {
+  border-right: 1px solid $border-filter-color;
+}
+
+.optimal {
+  border-top-right-radius: inherit;
+  border-bottom-right-radius: inherit;
+}
+
+.ticketList {
+  width: 500px;
+  margin-left: 20px;
+}
+
+.activeItem {
+  @include active-filter-item-styles();
+}
+
+@media (min-width: 320px) and (max-width: 767px) {
+  .filterTickets {
+    width: 100%;
+  }
+
+  .ticketList {
+    width: 90%;
+  }
+}
