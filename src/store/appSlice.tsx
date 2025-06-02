@@ -1,6 +1,11 @@
-import { createSlice } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  type PayloadAction,
+} from "@reduxjs/toolkit";
 // import type { PayloadAction } from "@reduxjs/toolkit";
 
+//интерфейсы
 interface aviasalesState {
   activeSort: string;
 }
@@ -12,6 +17,13 @@ interface filterState {
   threeTransfers: boolean;
 }
 
+interface searchTicketsStateType {
+  loading: boolean;
+  searchResponse: [] | null;
+  error: string | null;
+}
+
+//стейты
 const initialState: aviasalesState = {
   activeSort: "Самый дешёвый",
 };
@@ -23,6 +35,19 @@ const initialFilterState: filterState = {
   threeTransfers: false,
 };
 
+const searchTicketsState: searchTicketsStateType = {
+  loading: false,
+  searchResponse: [],
+  error: null,
+};
+
+const initialRequestsState = {
+  result: [],
+  status: "",
+  error: "",
+};
+
+//слайсы
 const mySlice = createSlice({
   name: "aviasales",
   initialState,
@@ -59,6 +84,64 @@ const filterSlice = createSlice({
   },
 });
 
+const requestSlice = createSlice({
+  name: "request",
+  initialState: initialRequestsState,
+  reducers: {
+    pending: (state) => {
+      state.status = "loading";
+      state.error = "error";
+    },
+    fulfilled: (state, action) => {
+      state.status = "resolved";
+      state.result = action.payload;
+    },
+    rejected: (state, action) => {},
+  },
+});
+
+export const fetchTickets = createAsyncThunk(
+  "request/fetchTickets",
+  async function () {
+    const response = await fetch(
+      "https://aviasales-test-api.kata.academy/search"
+    );
+
+    const { searchId } = await response.json();
+
+    const ticketsResponse = await fetch(
+      `https://aviasales-test-api.kata.academy/tickets?searchId=${searchId}`
+    );
+    const ticketsData = await ticketsResponse.json();
+
+    return ticketsData.tickets;
+  }
+);
+
+const searchTicketsSlice = createSlice({
+  name: "searchID",
+  initialState: searchTicketsState as searchTicketsStateType,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchTickets.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchTickets.fulfilled, (state, action: PayloadAction<[]>) => {
+        state.loading = false;
+        state.searchResponse = action.payload;
+      })
+      .addCase(
+        fetchTickets.rejected,
+        (state, action: PayloadAction<string | undefined>) => {
+          state.loading = false;
+          state.error = action.payload || null;
+        }
+      );
+  },
+});
+
 export const { setActiveSort } = mySlice.actions;
 
 export const {
@@ -68,5 +151,11 @@ export const {
   toggleCheckbox4,
   toggleAll,
 } = filterSlice.actions;
+
+export const { pending, fulfilled, rejected } = requestSlice.actions;
+
 export default mySlice.reducer;
+
 export const filterReducer = filterSlice.reducer;
+export const requestReducer = requestSlice.reducer;
+export const searchReducer = searchTicketsSlice.reducer;

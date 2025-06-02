@@ -1,11 +1,19 @@
 import TickedCard from "../TicketCard/TickedCard";
 import classes from "./TicketList.module.scss";
+import { useEffect, useState } from "react";
 
 import { useAppDispatch, useAppSelector } from "../../hooks/myHooks";
-import { setActiveSort } from "../../store/appSlice";
+import { setActiveSort, fetchTickets } from "../../store/appSlice";
 
 export function TicketList() {
   const dispatch = useAppDispatch();
+  const ticketsArray = useAppSelector(
+    (state) => state.searchReducer.searchResponse
+  );
+
+  ticketsArray.map((element) => {
+    console.log(element);
+  });
 
   return (
     <div className={classes.ticketList}>
@@ -36,12 +44,9 @@ export function TicketList() {
         </button>
       </div>
       <ul className={classes.ticketsUl}>
-        <TickedCard />
-        <TickedCard />
-        <TickedCard />
-        <TickedCard />
-        <TickedCard />
-        <TickedCard />
+        {ticketsArray?.map((ticket) => (
+          <TickedCard ticket={ticket} />
+        ))}
       </ul>
     </div>
   );
