@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { fetchTickets } from "./store/appSlice";
+import logo from "./images/Logo.svg";
 
 import { useAppDispatch } from "./hooks/myHooks";
 
@@ -17,7 +18,7 @@ function AviasalesApp() {
 
   return (
     <>
-      <img src="../src/images/Logo.svg" className={classes.imgLogo}></img>
+      <img src={logo} className={classes.imgLogo}></img>
 
       <div className={classes.generalContainer}>
         <Filters />

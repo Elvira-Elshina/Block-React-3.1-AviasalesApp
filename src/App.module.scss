@@ -10,6 +10,12 @@
 }
 
 .imgLogo {
+  display: block;
+  width: 80px;
+  height: 80px;
+  // background-image: url("../src/images/Logo.svg");
+  background-size: cover;
+  border: none;
   position: relative;
   left: 42%;
 }
