@@ -1,6 +1,6 @@
 import classes from "./TickedCard.module.scss";
 
-function TickedCard({ ticket }) {
+function TickedCard({ ticket }: any) {
   const { price, carrier } = ticket;
   const {
     origin: originTo,
@@ -67,7 +67,6 @@ function TickedCard({ ticket }) {
       : `${stopsBack.length} ПЕРЕСАДКИ`;
   };
 
-  console.log(ticket);
   return (
     <>
       <li className={classes.tickedCard}>

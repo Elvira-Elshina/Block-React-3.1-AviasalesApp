@@ -1,23 +1,48 @@
 import classes from "./Filters.module.scss";
 import { useAppSelector } from "../../hooks/myHooks";
-import {
-  toggleCheckbox1,
-  toggleCheckbox2,
-  toggleCheckbox3,
-  toggleCheckbox4,
-  toggleAll,
-} from "../../store/appSlice";
+import { setTransferFilters } from "../../store/appSlice";
 import { useDispatch } from "react-redux";
 
 function Filters() {
   const dispatch = useDispatch();
   const { withoutTr, oneTransfer, twoTransfers, threeTransfers } =
-    useAppSelector((state) => state.filterReducer);
+    useAppSelector((state) => state.mySliceReducer);
 
   const allChecked = withoutTr && oneTransfer && twoTransfers && threeTransfers;
 
   const handleToggleAll = () => {
-    dispatch(toggleAll(!allChecked));
+    dispatch(setTransferFilters({
+      withoutTr: !allChecked,
+      oneTransfer: !allChecked,
+      twoTransfers: !allChecked,
+      threeTransfers: !allChecked
+    }));
+  };
+
+  const handleToggleTransfer = (type: string) => {
+    const newState = {
+      withoutTr,
+      oneTransfer,
+      twoTransfers,
+      threeTransfers
+    };
+
+    switch (type) {
+      case 'withoutTr':
+        newState.withoutTr = !withoutTr;
+        break;
+      case 'oneTransfer':
+        newState.oneTransfer = !oneTransfer;
+        break;
+      case 'twoTransfers':
+        newState.twoTransfers = !twoTransfers;
+        break;
+      case 'threeTransfers':
+        newState.threeTransfers = !threeTransfers;
+        break;
+    }
+
+    dispatch(setTransferFilters(newState));
   };
 
   //типизированный список инпутов
@@ -61,7 +86,7 @@ function Filters() {
                 type="checkbox"
                 className={classes.defaultCheckbox}
                 checked={withoutTr}
-                onChange={() => dispatch(toggleCheckbox1())}
+                onChange={() => handleToggleTransfer('withoutTr')}
               />
               {customCheckbox}
               {filterItemsValues.withoutTransfers}
@@ -74,7 +99,7 @@ function Filters() {
                 type="checkbox"
                 className={classes.defaultCheckbox}
                 checked={oneTransfer}
-                onChange={() => dispatch(toggleCheckbox2())}
+                onChange={() => handleToggleTransfer('oneTransfer')}
               />
               {customCheckbox}
               {filterItemsValues.oneTransfer}
@@ -87,7 +112,7 @@ function Filters() {
                 type="checkbox"
                 className={classes.defaultCheckbox}
                 checked={twoTransfers}
-                onChange={() => dispatch(toggleCheckbox3())}
+                onChange={() => handleToggleTransfer('twoTransfers')}
               />
               {customCheckbox}
               {filterItemsValues.twoTransfers}
@@ -100,7 +125,7 @@ function Filters() {
                 type="checkbox"
                 className={classes.defaultCheckbox}
                 checked={threeTransfers}
-                onChange={() => dispatch(toggleCheckbox4())}
+                onChange={() => handleToggleTransfer('threeTransfers')}
               />
               {customCheckbox}
               {filterItemsValues.threeTransfers}
