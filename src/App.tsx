@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { fetchTickets } from "./store/appSlice";
-import { useDispatch } from "react-redux";
+
+import { useAppDispatch } from "./hooks/myHooks";
 
 import TicketList from "./components/TicketsList/TicketList";
 import Filters from "./components/Filters/Filters";
@@ -8,7 +9,7 @@ import Filters from "./components/Filters/Filters";
 import classes from "./App.module.scss";
 
 function AviasalesApp() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(fetchTickets());
